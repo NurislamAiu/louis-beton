@@ -782,7 +782,7 @@ export default function App() {
             </div>
             <span className="df font-black tracking-widest text-sm text-white">LOUIS BETON</span>
           </div>
-          <p className="text-white/22 text-xs text-center">© 2024 Louis Beton. Жетысай, Казахстан. Все права защищены.</p>
+          <p className="text-white/22 text-xs text-center">© 2026 Louis Beton. Жетысай, Казахстан. Все права защищены.</p>
           <div className="flex gap-5">
             <a href={CONTACTS.phoneHref} className="text-white/22 hover:text-white/55 transition-colors text-xs">{CONTACTS.phoneDisplay}</a>
             <a href={whatsappHref} className="text-white/22 transition-colors text-xs"
