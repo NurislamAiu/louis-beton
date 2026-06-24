@@ -58,7 +58,7 @@ const thermalPanels: Product[] = [
     id: 1,
     name: "Кирпич Классик",
     image: IMGS.panel1,
-    price: "3 200",
+    price: "2 000",
     tag: "Хит продаж",
     tagBg: "#FF7A00",
     description: "Имитация кирпичной кладки. Стиль лофт и классика для любого фасада.",
@@ -68,7 +68,7 @@ const thermalPanels: Product[] = [
     id: 2,
     name: "Травертин Люкс",
     image: IMGS.panel2,
-    price: "4 800",
+    price: "2 500",
     tag: "Премиум",
     tagBg: "#B8973B",
     description: "Изысканная текстура натурального травертина для премиальных объектов.",
@@ -78,7 +78,7 @@ const thermalPanels: Product[] = [
     id: 3,
     name: "Бетон Индастриал",
     image: IMGS.panel3,
-    price: "2 900",
+    price: "2 300",
     tag: "Новинка",
     tagBg: "#3A8A4A",
     description: "Современный индустриальный стиль с текстурой шлифованного бетона.",
@@ -91,7 +91,7 @@ const pavingStones: Product[] = [
     id: 4,
     name: "Брусчатка Классик",
     image: IMGS.paving1,
-    price: "1 800",
+    price: "3 000",
     tag: "Хит продаж",
     tagBg: "#FF7A00",
     description: "Классическая прямоугольная брусчатка для дорожек, дворов и площадей.",
@@ -101,7 +101,7 @@ const pavingStones: Product[] = [
     id: 5,
     name: "Плита Квадрат",
     image: IMGS.paving2,
-    price: "2 100",
+    price: "3 500",
     tag: "Премиум",
     tagBg: "#B8973B",
     description: "Крупноформатная квадратная плита — элегантность и простор.",
@@ -111,7 +111,7 @@ const pavingStones: Product[] = [
     id: 6,
     name: "Гранит Нуар",
     image: IMGS.paving3,
-    price: "3 400",
+    price: "4 000",
     tag: "Люкс",
     tagBg: "#B8973B",
     description: "Тёмная гранитная фактура для парадных входов и VIP-объектов.",
@@ -364,20 +364,18 @@ export default function App() {
       </nav>
 
       {/* ══════════════════════════ MOBILE CATALOG PAGE ══════════════════════════ */}
-      <section className="sm:hidden min-h-screen px-4 pt-24 pb-32" style={{ background:"#0E0E0E" }}>
-        <div className="mb-5">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-4"
-            style={{ border:"1px solid rgba(255,122,0,0.28)", background:"rgba(255,122,0,0.08)" }}>
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background:"#FF7A00" }}/>
-            <span className="df font-bold text-[10px] tracking-[0.28em] uppercase" style={{ color:"#FF7A00" }}>Быстрый каталог</span>
+      <section className="sm:hidden min-h-screen px-4 pt-24 pb-32" style={{ background:"#101010" }}>
+        <div className="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <div className="text-white/38 text-xs font-semibold uppercase tracking-widest mb-2">Louis Beton</div>
+            <h1 className="df font-black text-white leading-none text-5xl tracking-wide">КАТАЛОГ</h1>
           </div>
-          <h1 className="df font-black text-white leading-none text-5xl tracking-wide">LOUIS BETON</h1>
-          <p className="text-white/45 text-sm mt-3 leading-relaxed">
-            Выберите товары, нажмите отправить — заказ сразу откроется в WhatsApp.
-          </p>
+          <a href={CONTACTS.phoneHref} className="w-11 h-11 flex items-center justify-center flex-shrink-0" style={{ background:"#1A1A1A", border:"1px solid rgba(255,255,255,0.08)", color:"#FF7A00", borderRadius:"8px" }}>
+            <Phone size={18}/>
+          </a>
         </div>
 
-        <div className="sticky top-16 z-30 -mx-4 px-4 py-3 mb-4" style={{ background:"rgba(14,14,14,0.96)", backdropFilter:"blur(14px)", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
+        <div className="sticky top-16 z-30 -mx-4 px-4 py-3 mb-4" style={{ background:"rgba(16,16,16,0.96)", backdropFilter:"blur(14px)", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
           <div className="grid grid-cols-3 gap-2">
             {[
               { id:"all", label:"Все" },
@@ -388,7 +386,7 @@ export default function App() {
               return (
                 <button key={tab.id} onClick={() => setMobileCatalogTab(tab.id as "all" | "panels" | "paving")}
                   className="df font-bold text-xs tracking-widest uppercase py-3 transition-colors"
-                  style={{ background:on ? "#FF7A00" : "#181818", color:on ? "#000" : "rgba(255,255,255,0.55)", border:"1px solid rgba(255,255,255,0.08)" }}>
+                  style={{ background:on ? "#FF7A00" : "#1A1A1A", color:on ? "#000" : "rgba(255,255,255,0.58)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
                   {tab.label}
                 </button>
               );
@@ -400,12 +398,12 @@ export default function App() {
           {mobileProducts.map(product => {
             const quantity = getCartQuantity(product.id);
             return (
-              <div key={product.id} className={`${addedProductId === product.id ? "just-added" : ""}`} style={{ background:"#141414", border:"1px solid rgba(255,255,255,0.08)" }}>
+              <div key={product.id} className={`${addedProductId === product.id ? "just-added" : ""}`} style={{ background:"#171717", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px", overflow:"hidden" }}>
                 <div className="flex gap-3 p-3">
-                  <button onClick={() => setSelectedProduct(product)} className="relative w-28 h-28 flex-shrink-0 overflow-hidden bg-[#1A1A1A]">
+                  <button onClick={() => setSelectedProduct(product)} className="relative w-28 h-28 flex-shrink-0 overflow-hidden bg-[#1A1A1A]" style={{ borderRadius:"6px" }}>
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover"/>
                     {quantity > 0 && (
-                      <div className="cart-badge absolute top-2 right-2 flex items-center gap-1 px-2 py-1 df font-bold text-xs text-black" style={{ background:"#FF7A00" }}>
+                      <div className="cart-badge absolute top-2 right-2 flex items-center gap-1 px-2 py-1 df font-bold text-xs text-black" style={{ background:"#FF7A00", borderRadius:"6px" }}>
                         <ShoppingCart size={11}/> {quantity}
                       </div>
                     )}
@@ -426,20 +424,20 @@ export default function App() {
                       </div>
 
                       {quantity > 0 ? (
-                        <div className="flex items-center" style={{ border:"1px solid rgba(255,122,0,0.28)" }}>
-                          <button onClick={() => decreaseCartQuantity(product.id)} aria-label={`Уменьшить ${product.name}`} className="w-10 h-10 flex items-center justify-center text-white" style={{ background:"#1C1C1C" }}>
+                        <div className="flex items-center" style={{ border:"1px solid rgba(255,122,0,0.28)", borderRadius:"8px", overflow:"hidden" }}>
+                          <button onClick={() => decreaseCartQuantity(product.id)} aria-label={`Уменьшить ${product.name}`} className="w-10 h-10 flex items-center justify-center text-white" style={{ background:"#202020" }}>
                             <Minus size={16}/>
                           </button>
                           <div className="w-11 h-10 flex items-center justify-center df font-black text-black text-lg" style={{ background:"#FF7A00" }}>{quantity}</div>
-                          <button onClick={() => addToCart(product)} aria-label={`Добавить ${product.name}`} className="w-10 h-10 flex items-center justify-center text-white" style={{ background:"#1C1C1C" }}>
+                          <button onClick={() => addToCart(product)} aria-label={`Добавить ${product.name}`} className="w-10 h-10 flex items-center justify-center text-white" style={{ background:"#202020" }}>
                             <Plus size={16}/>
                           </button>
                         </div>
                       ) : (
                         <button onClick={() => addToCart(product)}
                           className="order-btn flex items-center justify-center gap-2 px-4 h-10 df font-bold text-xs tracking-widest uppercase text-black"
-                          style={{ background:"#FF7A00" }}>
-                          <Plus size={15}/> Выбрать
+                          style={{ background:"#FF7A00", borderRadius:"8px" }}>
+                          <Plus size={15}/> Добавить
                         </button>
                       )}
                     </div>
