@@ -190,7 +190,7 @@ export default function App() {
   const cartTotalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-[#0E0E0E] text-white overflow-x-hidden" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="min-h-screen bg-[#0E0E0E] text-white overflow-x-hidden pb-28 sm:pb-0" style={{ fontFamily: "'DM Sans', sans-serif" }}>
       <style>{`
         .df { font-family: 'Barlow Condensed', sans-serif; }
         html { scroll-behavior: smooth; }
@@ -797,13 +797,43 @@ export default function App() {
 
       {/* ══════════════════════════ FLOATING WHATSAPP ══════════════════════════ */}
       <a href={whatsappHref}
-        className="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 text-white font-semibold text-sm py-3 px-4 transition-all"
+        className="fixed bottom-5 right-5 z-50 hidden sm:flex items-center gap-2.5 text-white font-semibold text-sm py-3 px-4 transition-all"
         style={{ background:"#25D366", boxShadow:"0 0 30px rgba(37,211,102,0.32),0 4px 20px rgba(0,0,0,0.4)" }}
         onMouseOver={e=>(e.currentTarget.style.background="#1fbd5a")}
         onMouseOut={e=>(e.currentTarget.style.background="#25D366")}>
         <MessageCircle size={19}/>
         <span className="hidden sm:block">Написать в WhatsApp</span>
       </a>
+
+      {/* ══════════════════════════ MOBILE QUICK ORDER ══════════════════════════ */}
+      <div className="fixed left-0 right-0 bottom-0 z-[70] sm:hidden px-4 pt-3" style={{
+        paddingBottom:"calc(12px + env(safe-area-inset-bottom))",
+        background:"rgba(10,10,10,0.96)",
+        backdropFilter:"blur(18px)",
+        borderTop:"1px solid rgba(255,255,255,0.08)",
+        boxShadow:"0 -12px 30px rgba(0,0,0,0.35)",
+      }}>
+        <div className="flex items-center gap-3">
+          <div className="min-w-0 flex-1 flex items-center gap-3">
+            <div className="w-11 h-11 flex items-center justify-center flex-shrink-0" style={{ background:"rgba(255,122,0,0.12)", border:"1px solid rgba(255,122,0,0.28)", color:"#FF7A00" }}>
+              <ShoppingCart size={18}/>
+            </div>
+            <div className="min-w-0">
+              <div className="df font-black text-white text-lg tracking-wide leading-none">
+                {cartTotalQuantity > 0 ? `В ЗАКАЗЕ: ${cartTotalQuantity}` : "БЫСТРЫЙ ЗАКАЗ"}
+              </div>
+              <div className="text-white/35 text-xs truncate">
+                {cartTotalQuantity > 0 ? "Отправить выбранные товары" : "Написать в WhatsApp"}
+              </div>
+            </div>
+          </div>
+          <a href={whatsappHref} className="flex items-center justify-center gap-2 text-white font-bold px-5 py-3.5 df tracking-widest text-sm"
+            style={{ background:"#25D366", minWidth:"132px" }}>
+            <MessageCircle size={17}/>
+            {cartTotalQuantity > 0 ? "ОТПРАВИТЬ" : "НАПИСАТЬ"}
+          </a>
+        </div>
+      </div>
 
       {selectedProduct && (
         <div className="modal-fade fixed inset-0 z-[80] flex items-center justify-center px-4 py-6" style={{ background:"rgba(0,0,0,0.78)", backdropFilter:"blur(12px)" }}
