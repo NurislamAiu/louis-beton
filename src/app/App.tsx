@@ -5,6 +5,8 @@ import {
   Instagram,
   ShoppingCart,
   Trash2,
+  Plus,
+  Minus,
   Menu,
   X,
   ChevronRight,
@@ -140,6 +142,7 @@ const buildWhatsAppHref = (cart: CartItem[]) => {
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"panels" | "paving" | "all">("panels");
+  const [mobileCatalogTab, setMobileCatalogTab] = useState<"all" | "panels" | "paving">("all");
   const [scrolled, setScrolled] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [addedProductId, setAddedProductId] = useState<number | null>(null);
@@ -181,11 +184,22 @@ export default function App() {
     setCart((items) => items.filter((item) => item.id !== productId));
   };
 
+  const decreaseCartQuantity = (productId: number) => {
+    setCart((items) =>
+      items.flatMap((item) => {
+        if (item.id !== productId) return [item];
+        if (item.quantity <= 1) return [];
+        return [{ ...item, quantity: item.quantity - 1 }];
+      })
+    );
+  };
+
   const getCartQuantity = (productId: number) => {
     return cart.find((item) => item.id === productId)?.quantity ?? 0;
   };
 
   const products = activeTab === "all" ? allProducts : activeTab === "panels" ? thermalPanels : pavingStones;
+  const mobileProducts = mobileCatalogTab === "all" ? allProducts : mobileCatalogTab === "panels" ? thermalPanels : pavingStones;
   const whatsappHref = buildWhatsAppHref(cart);
   const cartTotalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
 
@@ -349,8 +363,102 @@ export default function App() {
         )}
       </nav>
 
+      {/* ══════════════════════════ MOBILE CATALOG PAGE ══════════════════════════ */}
+      <section className="sm:hidden min-h-screen px-4 pt-24 pb-32" style={{ background:"#0E0E0E" }}>
+        <div className="mb-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-4"
+            style={{ border:"1px solid rgba(255,122,0,0.28)", background:"rgba(255,122,0,0.08)" }}>
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background:"#FF7A00" }}/>
+            <span className="df font-bold text-[10px] tracking-[0.28em] uppercase" style={{ color:"#FF7A00" }}>Быстрый каталог</span>
+          </div>
+          <h1 className="df font-black text-white leading-none text-5xl tracking-wide">LOUIS BETON</h1>
+          <p className="text-white/45 text-sm mt-3 leading-relaxed">
+            Выберите товары, нажмите отправить — заказ сразу откроется в WhatsApp.
+          </p>
+        </div>
+
+        <div className="sticky top-16 z-30 -mx-4 px-4 py-3 mb-4" style={{ background:"rgba(14,14,14,0.96)", backdropFilter:"blur(14px)", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { id:"all", label:"Все" },
+              { id:"panels", label:"Термопанели" },
+              { id:"paving", label:"Брусчатка" },
+            ].map(tab => {
+              const on = mobileCatalogTab === tab.id;
+              return (
+                <button key={tab.id} onClick={() => setMobileCatalogTab(tab.id as "all" | "panels" | "paving")}
+                  className="df font-bold text-xs tracking-widest uppercase py-3 transition-colors"
+                  style={{ background:on ? "#FF7A00" : "#181818", color:on ? "#000" : "rgba(255,255,255,0.55)", border:"1px solid rgba(255,255,255,0.08)" }}>
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          {mobileProducts.map(product => {
+            const quantity = getCartQuantity(product.id);
+            return (
+              <div key={product.id} className={`${addedProductId === product.id ? "just-added" : ""}`} style={{ background:"#141414", border:"1px solid rgba(255,255,255,0.08)" }}>
+                <div className="flex gap-3 p-3">
+                  <button onClick={() => setSelectedProduct(product)} className="relative w-28 h-28 flex-shrink-0 overflow-hidden bg-[#1A1A1A]">
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover"/>
+                    {quantity > 0 && (
+                      <div className="cart-badge absolute top-2 right-2 flex items-center gap-1 px-2 py-1 df font-bold text-xs text-black" style={{ background:"#FF7A00" }}>
+                        <ShoppingCart size={11}/> {quantity}
+                      </div>
+                    )}
+                  </button>
+
+                  <div className="min-w-0 flex-1 flex flex-col">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <h2 className="df font-black text-white text-xl leading-tight">{product.name}</h2>
+                        <p className="text-white/36 text-xs mt-1 line-clamp-2">{product.description}</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 flex items-end justify-between gap-2">
+                      <div>
+                        <div className="text-white/28 text-[11px]">от</div>
+                        <div className="df font-black text-2xl leading-none" style={{ color:"#FF7A00" }}>{product.price} <span className="text-white/35 text-xs">₸/м²</span></div>
+                      </div>
+
+                      {quantity > 0 ? (
+                        <div className="flex items-center" style={{ border:"1px solid rgba(255,122,0,0.28)" }}>
+                          <button onClick={() => decreaseCartQuantity(product.id)} aria-label={`Уменьшить ${product.name}`} className="w-10 h-10 flex items-center justify-center text-white" style={{ background:"#1C1C1C" }}>
+                            <Minus size={16}/>
+                          </button>
+                          <div className="w-11 h-10 flex items-center justify-center df font-black text-black text-lg" style={{ background:"#FF7A00" }}>{quantity}</div>
+                          <button onClick={() => addToCart(product)} aria-label={`Добавить ${product.name}`} className="w-10 h-10 flex items-center justify-center text-white" style={{ background:"#1C1C1C" }}>
+                            <Plus size={16}/>
+                          </button>
+                        </div>
+                      ) : (
+                        <button onClick={() => addToCart(product)}
+                          className="order-btn flex items-center justify-center gap-2 px-4 h-10 df font-bold text-xs tracking-widest uppercase text-black"
+                          style={{ background:"#FF7A00" }}>
+                          <Plus size={15}/> Выбрать
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <button onClick={() => setSelectedProduct(product)}
+                  className="w-full py-3 df font-bold text-xs tracking-widest uppercase text-white/45"
+                  style={{ borderTop:"1px solid rgba(255,255,255,0.06)" }}>
+                  Подробнее
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       {/* ══════════════════════════ HERO ══════════════════════════ */}
-      <section className="relative flex items-center overflow-hidden" style={{ minHeight: "100svh" }}>
+      <section className="relative hidden sm:flex items-center overflow-hidden" style={{ minHeight: "100svh" }}>
         {/* BG */}
         <div className="absolute inset-0 bg-[#0A0A0A]">
           <img src={IMGS.hero} alt="Luxury modern house facade" className="w-full h-full object-cover"
@@ -434,7 +542,7 @@ export default function App() {
       </section>
 
       {/* ══════════════════════════ TICKER ══════════════════════════ */}
-      <div className="overflow-hidden py-3" style={{ background:"#FF7A00" }}>
+      <div className="hidden sm:block overflow-hidden py-3" style={{ background:"#FF7A00" }}>
         <div className="flex gap-10 ticker-track whitespace-nowrap">
           {[...TICKER,...TICKER,...TICKER].map((item, i) => (
             <span key={i} className={`df font-bold text-xs tracking-[0.24em] uppercase ${item==="•"?"opacity-35 text-black":"text-black"}`}>
