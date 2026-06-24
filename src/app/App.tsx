@@ -7,6 +7,7 @@ import {
   Trash2,
   Plus,
   Minus,
+  ArrowLeft,
   Menu,
   X,
   ChevronRight,
@@ -38,11 +39,22 @@ const IMGS = {
   house: "https://images.unsplash.com/photo-1614595737476-42487331b8a1?w=900&h=700&fit=crop&auto=format",
 };
 
+const houseImg = (index: number) => `./assets/house/image${index}.jpeg`;
+const windowImg = (index: number) => `./assets/window/window${index}.png`;
+const columnImg = (index: number) => `./assets/column/column${index}.png`;
+const fasadImg = (index: number) => `./assets/fasad/poli${index}.png`;
+const tasImg = (index: number) => `./assets/tas/tas${index}.png`;
+const rasImg = (index: number) => `./assets/ras/${encodeURIComponent(`расходник${index}.png`)}`;
+
+type CatalogCategoryId = "panels" | "paving" | "corners" | "windows" | "materials" | "houses";
+
 type Product = {
   id: number;
+  category: CatalogCategoryId;
   name: string;
   image: string;
   price: string;
+  unit: string;
   tag: string;
   tagBg: string;
   description: string;
@@ -56,66 +68,630 @@ type CartItem = Product & {
 const thermalPanels: Product[] = [
   {
     id: 1,
-    name: "Кирпич Классик",
-    image: IMGS.panel1,
+    category: "panels",
+    name: "Термопанель 01",
+    image: fasadImg(1),
     price: "2 000",
-    tag: "Хит продаж",
-    tagBg: "#FF7A00",
-    description: "Имитация кирпичной кладки. Стиль лофт и классика для любого фасада.",
+    unit: "₸/м²",
+    tag: "Фасад",
+    tagBg: "#D9C7A3",
+    description: "Фасадная термопанель для утепления и декоративной отделки дома.",
     specs: ["Толщина: 60 мм", "Гарантия: 50 лет", "Класс: A+"],
   },
   {
     id: 2,
-    name: "Травертин Люкс",
-    image: IMGS.panel2,
+    category: "panels",
+    name: "Термопанель 02",
+    image: fasadImg(2),
     price: "2 500",
-    tag: "Премиум",
-    tagBg: "#B8973B",
-    description: "Изысканная текстура натурального травертина для премиальных объектов.",
+    unit: "₸/м²",
+    tag: "Фасад",
+    tagBg: "#E8E2D6",
+    description: "Декоративная фасадная панель с готовой фактурой.",
     specs: ["Толщина: 70 мм", "Гарантия: 50 лет", "Класс: A+"],
   },
   {
     id: 3,
-    name: "Бетон Индастриал",
-    image: IMGS.panel3,
+    category: "panels",
+    name: "Термопанель 03",
+    image: fasadImg(3),
     price: "2 300",
-    tag: "Новинка",
-    tagBg: "#3A8A4A",
-    description: "Современный индустриальный стиль с текстурой шлифованного бетона.",
+    unit: "₸/м²",
+    tag: "Панель",
+    tagBg: "#C7C2B8",
+    description: "Термопанель для современного фасада и аккуратной отделки.",
     specs: ["Толщина: 60 мм", "Гарантия: 50 лет", "Класс: A"],
+  },
+  {
+    id: 4,
+    category: "panels",
+    name: "Термопанель 04",
+    image: fasadImg(4),
+    price: "2 400",
+    unit: "₸/м²",
+    tag: "Рельеф",
+    tagBg: "#D7CCB6",
+    description: "Рельефная панель для фасада, цоколя и акцентных зон.",
+    specs: ["Толщина: 60 мм", "Утепление: EPS", "Класс: A"],
+  },
+  {
+    id: 5,
+    category: "panels",
+    name: "Термопанель 05",
+    image: fasadImg(5),
+    price: "2 500",
+    unit: "₸/м²",
+    tag: "Премиум",
+    tagBg: "#D0B889",
+    description: "Панель для мягкого премиального фасадного оформления.",
+    specs: ["Толщина: 70 мм", "Гарантия: 50 лет", "Класс: A+"],
+  },
+  {
+    id: 6,
+    category: "panels",
+    name: "Термопанель 06",
+    image: fasadImg(6),
+    price: "2 000",
+    unit: "₸/м²",
+    tag: "Фасад",
+    tagBg: "#D9C7A3",
+    description: "Вариант термопанели для выбора фактуры и цвета фасада.",
+    specs: ["Толщина: 60 мм", "Утепление: EPS", "Класс: A"],
+  },
+  {
+    id: 7,
+    category: "panels",
+    name: "Термопанель 07",
+    image: fasadImg(7),
+    price: "2 300",
+    unit: "₸/м²",
+    tag: "Панель",
+    tagBg: "#C7C2B8",
+    description: "Фасадная панель для частных домов и коммерческих объектов.",
+    specs: ["Толщина: 60 мм", "Гарантия: 50 лет", "Класс: A"],
+  },
+  {
+    id: 8,
+    category: "panels",
+    name: "Термопанель 08",
+    image: fasadImg(8),
+    price: "2 400",
+    unit: "₸/м²",
+    tag: "Рельеф",
+    tagBg: "#D7CCB6",
+    description: "Декоративная термопанель для фасадных акцентов.",
+    specs: ["Толщина: 60 мм", "Утепление: EPS", "Класс: A"],
+  },
+  {
+    id: 9,
+    category: "panels",
+    name: "Термопанель 09",
+    image: fasadImg(9),
+    price: "2 500",
+    unit: "₸/м²",
+    tag: "Премиум",
+    tagBg: "#D0B889",
+    description: "Премиальная термопанель для выразительного фасада.",
+    specs: ["Толщина: 70 мм", "Гарантия: 50 лет", "Класс: A+"],
   },
 ];
 
 const pavingStones: Product[] = [
   {
-    id: 4,
-    name: "Брусчатка Классик",
-    image: IMGS.paving1,
+    id: 50,
+    category: "paving",
+    name: "Брусчатка 01",
+    image: tasImg(1),
     price: "3 000",
-    tag: "Хит продаж",
-    tagBg: "#FF7A00",
-    description: "Классическая прямоугольная брусчатка для дорожек, дворов и площадей.",
+    unit: "₸/м²",
+    tag: "Двор",
+    tagBg: "#D9C7A3",
+    description: "Брусчатка для двора, дорожек и аккуратного оформления участка.",
     specs: ["Толщина: 60 мм", "Гарантия: 30 лет", "Нагрузка: 400 т/м²"],
   },
   {
-    id: 5,
-    name: "Плита Квадрат",
-    image: IMGS.paving2,
+    id: 51,
+    category: "paving",
+    name: "Брусчатка 02",
+    image: tasImg(2),
     price: "3 500",
-    tag: "Премиум",
-    tagBg: "#B8973B",
-    description: "Крупноформатная квадратная плита — элегантность и простор.",
+    unit: "₸/м²",
+    tag: "Двор",
+    tagBg: "#C7C2B8",
+    description: "Вариант брусчатки для дворовой зоны и входной дорожки.",
     specs: ["Толщина: 80 мм", "Гарантия: 30 лет", "Нагрузка: 400 т/м²"],
   },
   {
-    id: 6,
-    name: "Гранит Нуар",
-    image: IMGS.paving3,
+    id: 52,
+    category: "paving",
+    name: "Брусчатка 03",
+    image: tasImg(3),
+    price: "3 800",
+    unit: "₸/м²",
+    tag: "Популярно",
+    tagBg: "#D7CCB6",
+    description: "Фигурная брусчатка для дорожек, парковки и двора.",
+    specs: ["Толщина: 60 мм", "Гарантия: 30 лет", "Нагрузка: 400 т/м²"],
+  },
+  {
+    id: 53,
+    category: "paving",
+    name: "Брусчатка 04",
+    image: tasImg(4),
     price: "4 000",
-    tag: "Люкс",
-    tagBg: "#B8973B",
-    description: "Тёмная гранитная фактура для парадных входов и VIP-объектов.",
+    unit: "₸/м²",
+    tag: "Прочная",
+    tagBg: "#BEB7AA",
+    description: "Прочная брусчатка для двора, заезда и зоны парковки.",
     specs: ["Толщина: 60 мм", "Гарантия: 50 лет", "Нагрузка: 600 т/м²"],
+  },
+  {
+    id: 54,
+    category: "paving",
+    name: "Брусчатка 05",
+    image: tasImg(5),
+    price: "3 500",
+    unit: "₸/м²",
+    tag: "Плита",
+    tagBg: "#D9C7A3",
+    description: "Брусчатка для ровного покрытия и спокойного современного вида.",
+    specs: ["Толщина: 60 мм", "Гарантия: 30 лет", "Нагрузка: 400 т/м²"],
+  },
+  {
+    id: 55,
+    category: "paving",
+    name: "Брусчатка 06",
+    image: tasImg(6),
+    price: "3 800",
+    unit: "₸/м²",
+    tag: "Плита",
+    tagBg: "#C7C2B8",
+    description: "Крупный формат для двора, площадки или зоны отдыха.",
+    specs: ["Толщина: 80 мм", "Гарантия: 30 лет", "Нагрузка: 400 т/м²"],
+  },
+  {
+    id: 56,
+    category: "paving",
+    name: "Брусчатка 07",
+    image: tasImg(7),
+    price: "3 000",
+    unit: "₸/м²",
+    tag: "Двор",
+    tagBg: "#D7CCB6",
+    description: "Брусчатка для дорожек и дворовой территории.",
+    specs: ["Толщина: 60 мм", "Гарантия: 30 лет", "Нагрузка: 400 т/м²"],
+  },
+  {
+    id: 57,
+    category: "paving",
+    name: "Брусчатка 08",
+    image: tasImg(8),
+    price: "4 000",
+    unit: "₸/м²",
+    tag: "Прочная",
+    tagBg: "#BEB7AA",
+    description: "Прочное покрытие для активной эксплуатации и парковки.",
+    specs: ["Толщина: 80 мм", "Гарантия: 30 лет", "Нагрузка: 600 т/м²"],
+  },
+  {
+    id: 58,
+    category: "paving",
+    name: "Брусчатка 09",
+    image: tasImg(9),
+    price: "3 500",
+    unit: "₸/м²",
+    tag: "Популярно",
+    tagBg: "#D9C7A3",
+    description: "Вариант брусчатки для завершенного оформления двора.",
+    specs: ["Толщина: 60 мм", "Гарантия: 30 лет", "Нагрузка: 400 т/м²"],
+  },
+];
+
+const cornerDetails: Product[] = [
+  {
+    id: 11,
+    category: "corners",
+    name: "Колона 01",
+    image: columnImg(1),
+    price: "",
+    unit: "",
+    tag: "Колона",
+    tagBg: "#D9C7A3",
+    description: "Декоративная колона для оформления фасада и входной зоны.",
+    specs: ["Колона", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 12,
+    category: "corners",
+    name: "Колона 02",
+    image: columnImg(2),
+    price: "",
+    unit: "",
+    tag: "Колона",
+    tagBg: "#C7C2B8",
+    description: "Фасадный декоративный элемент для аккуратного завершения проема.",
+    specs: ["Колона", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 13,
+    category: "corners",
+    name: "Колона 03",
+    image: columnImg(3),
+    price: "",
+    unit: "",
+    tag: "Колона",
+    tagBg: "#D0B889",
+    description: "Вариант колоны для классического фасада и декоративных акцентов.",
+    specs: ["Колона", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 14,
+    category: "corners",
+    name: "Колона 04",
+    image: columnImg(4),
+    price: "",
+    unit: "",
+    tag: "Колона",
+    tagBg: "#D9C7A3",
+    description: "Декоративная колона для визуального выделения входной группы.",
+    specs: ["Колона", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 15,
+    category: "corners",
+    name: "Колона 05",
+    image: columnImg(5),
+    price: "",
+    unit: "",
+    tag: "Колона",
+    tagBg: "#C7C2B8",
+    description: "Элемент для оформления фасада, оконной зоны или входа.",
+    specs: ["Колона", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 16,
+    category: "corners",
+    name: "Колона 06",
+    image: columnImg(6),
+    price: "",
+    unit: "",
+    tag: "Колона",
+    tagBg: "#D0B889",
+    description: "Высокая декоративная колона для фасадного оформления.",
+    specs: ["Колона", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 17,
+    category: "corners",
+    name: "Колона 07",
+    image: columnImg(7),
+    price: "",
+    unit: "",
+    tag: "Колона",
+    tagBg: "#D9C7A3",
+    description: "Колона для современного или классического фасадного решения.",
+    specs: ["Колона", "Фасад", "Подбор по размеру"],
+  },
+];
+
+const windowDecor: Product[] = [
+  {
+    id: 30,
+    category: "windows",
+    name: "Оконный декор 01",
+    image: windowImg(1),
+    price: "",
+    unit: "",
+    tag: "Окно",
+    tagBg: "#D9C7A3",
+    description: "Декоративный элемент для оформления окна и фасадного акцента.",
+    specs: ["Оконный декор", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 31,
+    category: "windows",
+    name: "Оконный декор 02",
+    image: windowImg(2),
+    price: "",
+    unit: "",
+    tag: "Окно",
+    tagBg: "#C7C2B8",
+    description: "Аккуратная фасадная рамка для современного оформления окна.",
+    specs: ["Оконный декор", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 32,
+    category: "windows",
+    name: "Оконный декор 03",
+    image: windowImg(3),
+    price: "",
+    unit: "",
+    tag: "Окно",
+    tagBg: "#D0B889",
+    description: "Декоративное решение для выделения окна на фасаде дома.",
+    specs: ["Оконный декор", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 33,
+    category: "windows",
+    name: "Оконный декор 04",
+    image: windowImg(4),
+    price: "",
+    unit: "",
+    tag: "Окно",
+    tagBg: "#D9C7A3",
+    description: "Фасадный декор для окна с выразительным верхним элементом.",
+    specs: ["Оконный декор", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 34,
+    category: "windows",
+    name: "Оконный декор 05",
+    image: windowImg(5),
+    price: "",
+    unit: "",
+    tag: "Окно",
+    tagBg: "#C7C2B8",
+    description: "Минималистичный оконный декор для спокойного фасада.",
+    specs: ["Оконный декор", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 35,
+    category: "windows",
+    name: "Оконный декор 06",
+    image: windowImg(6),
+    price: "",
+    unit: "",
+    tag: "Окно",
+    tagBg: "#D0B889",
+    description: "Декоративная рамка для окна с классическим фасадным настроением.",
+    specs: ["Оконный декор", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 36,
+    category: "windows",
+    name: "Оконный декор 07",
+    image: windowImg(7),
+    price: "",
+    unit: "",
+    tag: "Окно",
+    tagBg: "#D9C7A3",
+    description: "Фасадный элемент для аккуратного обрамления оконного проема.",
+    specs: ["Оконный декор", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 37,
+    category: "windows",
+    name: "Оконный декор 08",
+    image: windowImg(8),
+    price: "",
+    unit: "",
+    tag: "Окно",
+    tagBg: "#C7C2B8",
+    description: "Оконный декор для завершенного и дорогого вида фасада.",
+    specs: ["Оконный декор", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 38,
+    category: "windows",
+    name: "Оконный декор 09",
+    image: windowImg(9),
+    price: "",
+    unit: "",
+    tag: "Окно",
+    tagBg: "#D0B889",
+    description: "Декоративное оформление окна с чистыми пропорциями.",
+    specs: ["Оконный декор", "Фасад", "Подбор по размеру"],
+  },
+  {
+    id: 39,
+    category: "windows",
+    name: "Оконный декор 10",
+    image: windowImg(10),
+    price: "",
+    unit: "",
+    tag: "Окно",
+    tagBg: "#D9C7A3",
+    description: "Вариант декоративного окна для подбора фасадного стиля.",
+    specs: ["Оконный декор", "Фасад", "Подбор по размеру"],
+  },
+];
+
+const consumables: Product[] = [
+  {
+    id: 40,
+    category: "materials",
+    name: "Клей фасадный",
+    image: rasImg(1),
+    price: "2 800",
+    unit: "₸/мешок",
+    tag: "Монтаж",
+    tagBg: "#D9C7A3",
+    description: "Клей для монтажа термопанелей и фасадных элементов.",
+    specs: ["Вес: 25 кг", "Для наружных работ", "Расход зависит от основания"],
+  },
+  {
+    id: 41,
+    category: "materials",
+    name: "Затирка",
+    image: rasImg(2),
+    price: "1 800",
+    unit: "₸/мешок",
+    tag: "Швы",
+    tagBg: "#C7C2B8",
+    description: "Фасадная смесь для аккуратного заполнения швов.",
+    specs: ["Цвет под заказ", "Для фасада", "Влагостойкая"],
+  },
+  {
+    id: 42,
+    category: "materials",
+    name: "Грунтовка",
+    image: rasImg(3),
+    price: "1 500",
+    unit: "₸/кан",
+    tag: "Основа",
+    tagBg: "#D7CCB6",
+    description: "Грунтовка для подготовки поверхности перед монтажом.",
+    specs: ["Для стен", "Укрепляет основание", "Наружные работы"],
+  },
+  {
+    id: 43,
+    category: "materials",
+    name: "Крепеж комплект",
+    image: rasImg(4),
+    price: "900",
+    unit: "₸/комп",
+    tag: "Крепеж",
+    tagBg: "#BEB7AA",
+    description: "Крепежные элементы для надежной фиксации фасадных деталей.",
+    specs: ["Для монтажа", "Комплект", "Подбор по объекту"],
+  },
+];
+
+const readyHouses: Product[] = [
+  {
+    id: 18,
+    category: "houses",
+    name: "Наша работа 01",
+    image: houseImg(1),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#D9C7A3",
+    description: "Готовый объект Louis Beton. Подбор материалов и фасадного решения по объекту.",
+    specs: ["Фасад", "Термопанели", "Консультация"],
+  },
+  {
+    id: 19,
+    category: "houses",
+    name: "Наша работа 02",
+    image: houseImg(2),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#C7C2B8",
+    description: "Фасадное решение с подбором цвета, углов и декоративных деталей.",
+    specs: ["Фасад", "Углы", "Подбор цвета"],
+  },
+  {
+    id: 20,
+    category: "houses",
+    name: "Наша работа 03",
+    image: houseImg(3),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#D0B889",
+    description: "Готовый пример фасада с термопанелью, колоннами и декоративными деталями.",
+    specs: ["Фасад под ключ", "Колоны", "Консультация"],
+  },
+  {
+    id: 21,
+    category: "houses",
+    name: "Наша работа 04",
+    image: houseImg(4),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#D9C7A3",
+    description: "Реальный объект с фасадной отделкой Louis Beton.",
+    specs: ["Фасад", "Монтаж", "Подбор по объекту"],
+  },
+  {
+    id: 22,
+    category: "houses",
+    name: "Наша работа 05",
+    image: houseImg(5),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#C7C2B8",
+    description: "Пример готовой отделки дома с подбором фактуры и цвета.",
+    specs: ["Фасад", "Цвет под заказ", "Монтаж"],
+  },
+  {
+    id: 23,
+    category: "houses",
+    name: "Наша работа 06",
+    image: houseImg(6),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#D0B889",
+    description: "Готовая работа для примера перед заказом и расчетом материалов.",
+    specs: ["Наш объект", "Материалы", "Консультация"],
+  },
+  {
+    id: 24,
+    category: "houses",
+    name: "Наша работа 07",
+    image: houseImg(7),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#D9C7A3",
+    description: "Фасадный объект с аккуратной отделкой и деталями.",
+    specs: ["Фасад", "Детали", "Подбор"],
+  },
+  {
+    id: 25,
+    category: "houses",
+    name: "Наша работа 08",
+    image: houseImg(8),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#C7C2B8",
+    description: "Фото выполненной работы для выбора похожего фасадного решения.",
+    specs: ["Наши работы", "Фасад", "Подбор"],
+  },
+  {
+    id: 26,
+    category: "houses",
+    name: "Наша работа 09",
+    image: houseImg(9),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#D0B889",
+    description: "Пример готового дома с материалами Louis Beton.",
+    specs: ["Дом", "Фасад", "Материалы"],
+  },
+  {
+    id: 27,
+    category: "houses",
+    name: "Наша работа 10",
+    image: houseImg(10),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#D9C7A3",
+    description: "Готовая работа для ориентира по цветам и фактуре.",
+    specs: ["Фасад", "Фактура", "Цвет"],
+  },
+  {
+    id: 28,
+    category: "houses",
+    name: "Наша работа 11",
+    image: houseImg(11),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#C7C2B8",
+    description: "Фото объекта из портфолио Louis Beton.",
+    specs: ["Портфолио", "Фасад", "Подбор"],
+  },
+  {
+    id: 29,
+    category: "houses",
+    name: "Наша работа 12",
+    image: houseImg(12),
+    price: "",
+    unit: "",
+    tag: "Работа",
+    tagBg: "#D0B889",
+    description: "Еще один пример готовой отделки для выбора перед заказом.",
+    specs: ["Наш объект", "Отделка", "WhatsApp"],
   },
 ];
 
@@ -124,13 +700,64 @@ const TICKER = [
   "ЖЕТЫСАЙ","•","ПРЯМОЙ ПРОИЗВОДИТЕЛЬ","•","50 ЛЕТ ГАРАНТИИ","•",
 ];
 
-const allProducts = [...thermalPanels, ...pavingStones];
+const catalogCategories: Array<{
+  id: CatalogCategoryId;
+  label: string;
+  shortLabel: string;
+  description: string;
+  cover: string;
+}> = [
+  {
+    id: "panels",
+    label: "Термопанели",
+    shortLabel: "Панели",
+    description: "Фасадные панели с утеплением и готовой фактурой.",
+    cover: fasadImg(1),
+  },
+  {
+    id: "paving",
+    label: "Брусчатки",
+    shortLabel: "Брусчатки",
+    description: "Покрытия для двора, дорожек, парковки и входной зоны.",
+    cover: tasImg(1),
+  },
+  {
+    id: "corners",
+    label: "Угловые детали / колоны",
+    shortLabel: "Углы",
+    description: "Фасадные углы, колоны и декоративные элементы.",
+    cover: columnImg(1),
+  },
+  {
+    id: "windows",
+    label: "Декоративные элементы для окон",
+    shortLabel: "Окна",
+    description: "Оконные рамки и фасадный декор для проемов.",
+    cover: windowImg(1),
+  },
+  {
+    id: "materials",
+    label: "Расходные материалы",
+    shortLabel: "Материалы",
+    description: "Клей, затирка, грунтовка и крепеж для монтажа.",
+    cover: rasImg(1),
+  },
+  {
+    id: "houses",
+    label: "Готовые домы / Наши работы",
+    shortLabel: "Работы",
+    description: "Реальные объекты и готовые фасадные решения.",
+    cover: houseImg(1),
+  },
+];
+
+const allProducts = [...thermalPanels, ...pavingStones, ...cornerDetails, ...windowDecor, ...consumables, ...readyHouses];
 
 const buildWhatsAppHref = (cart: CartItem[]) => {
   const text = cart.length
     ? [
         "Здравствуйте! Я с сайта Louis Beton, хочу оформить заказ:",
-        ...cart.map((item, index) => `${index + 1}. ${item.name} - ${item.quantity} шт., от ${item.price} ₸/м²`),
+        ...cart.map((item, index) => `${index + 1}. ${item.name} - ${item.quantity} шт.${item.price ? `, от ${item.price} ${item.unit}` : ""}`),
         "",
         "Пожалуйста, свяжитесь со мной для расчета.",
       ].join("\n")
@@ -142,9 +769,11 @@ const buildWhatsAppHref = (cart: CartItem[]) => {
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"panels" | "paving" | "all">("panels");
-  const [mobileCatalogTab, setMobileCatalogTab] = useState<"all" | "panels" | "paving">("all");
+  const [mobileCatalogTab, setMobileCatalogTab] = useState<CatalogCategoryId>("panels");
+  const [mobileCatalogScreen, setMobileCatalogScreen] = useState<CatalogCategoryId | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [mobileCartOpen, setMobileCartOpen] = useState(false);
   const [addedProductId, setAddedProductId] = useState<number | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
@@ -199,7 +828,9 @@ export default function App() {
   };
 
   const products = activeTab === "all" ? allProducts : activeTab === "panels" ? thermalPanels : pavingStones;
-  const mobileProducts = mobileCatalogTab === "all" ? allProducts : mobileCatalogTab === "panels" ? thermalPanels : pavingStones;
+  const mobileCategoryId = mobileCatalogScreen ?? mobileCatalogTab;
+  const mobileProducts = allProducts.filter((product) => product.category === mobileCategoryId);
+  const activeMobileCategory = catalogCategories.find((category) => category.id === mobileCategoryId) ?? catalogCategories[0];
   const whatsappHref = buildWhatsAppHref(cart);
   const cartTotalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
 
@@ -364,95 +995,221 @@ export default function App() {
       </nav>
 
       {/* ══════════════════════════ MOBILE CATALOG PAGE ══════════════════════════ */}
-      <section className="sm:hidden min-h-screen px-4 pt-24 pb-32" style={{ background:"#101010" }}>
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <div className="text-white/38 text-xs font-semibold uppercase tracking-widest mb-2">Louis Beton</div>
-            <h1 className="df font-black text-white leading-none text-5xl tracking-wide">КАТАЛОГ</h1>
-          </div>
-          <a href={CONTACTS.phoneHref} className="w-11 h-11 flex items-center justify-center flex-shrink-0" style={{ background:"#1A1A1A", border:"1px solid rgba(255,255,255,0.08)", color:"#FF7A00", borderRadius:"8px" }}>
-            <Phone size={18}/>
-          </a>
-        </div>
+      <section className="sm:hidden min-h-screen px-4 pt-22 pb-32" style={{ background:"#111111" }}>
+        {mobileCatalogScreen === null ? (
+          <>
+            <div className="mb-5">
+              <div className="flex items-center justify-between gap-4 mb-5">
+                <div className="min-w-0">
+                  <div className="text-white/36 text-xs font-semibold uppercase tracking-widest mb-2">Louis Beton</div>
+                  <h1 className="df font-black text-white leading-none text-[2.45rem] tracking-wide">Каталог</h1>
+                </div>
+                <a href={CONTACTS.phoneHref} className="w-11 h-11 flex items-center justify-center flex-shrink-0" style={{ background:"#191919", border:"1px solid rgba(255,255,255,0.08)", color:"#D8B06A", borderRadius:"8px" }}>
+                  <Phone size={18}/>
+                </a>
+              </div>
 
-        <div className="sticky top-16 z-30 -mx-4 px-4 py-3 mb-4" style={{ background:"rgba(16,16,16,0.96)", backdropFilter:"blur(14px)", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { id:"all", label:"Все" },
-              { id:"panels", label:"Термопанели" },
-              { id:"paving", label:"Брусчатка" },
-            ].map(tab => {
-              const on = mobileCatalogTab === tab.id;
-              return (
-                <button key={tab.id} onClick={() => setMobileCatalogTab(tab.id as "all" | "panels" | "paving")}
-                  className="df font-bold text-xs tracking-widest uppercase py-3 transition-colors"
-                  style={{ background:on ? "#FF7A00" : "#1A1A1A", color:on ? "#000" : "rgba(255,255,255,0.58)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          {mobileProducts.map(product => {
-            const quantity = getCartQuantity(product.id);
-            return (
-              <div key={product.id} className={`${addedProductId === product.id ? "just-added" : ""}`} style={{ background:"#171717", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px", overflow:"hidden" }}>
-                <div className="flex gap-3 p-3">
-                  <button onClick={() => setSelectedProduct(product)} className="relative w-28 h-28 flex-shrink-0 overflow-hidden bg-[#1A1A1A]" style={{ borderRadius:"6px" }}>
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover"/>
-                    {quantity > 0 && (
-                      <div className="cart-badge absolute top-2 right-2 flex items-center gap-1 px-2 py-1 df font-bold text-xs text-black" style={{ background:"#FF7A00", borderRadius:"6px" }}>
-                        <ShoppingCart size={11}/> {quantity}
-                      </div>
-                    )}
-                  </button>
-
-                  <div className="min-w-0 flex-1 flex flex-col">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0">
-                        <h2 className="df font-black text-white text-xl leading-tight">{product.name}</h2>
-                        <p className="text-white/36 text-xs mt-1 line-clamp-2">{product.description}</p>
-                      </div>
-                    </div>
-
-                    <div className="mt-3 flex items-end justify-between gap-2">
-                      <div>
-                        <div className="text-white/28 text-[11px]">от</div>
-                        <div className="df font-black text-2xl leading-none" style={{ color:"#FF7A00" }}>{product.price} <span className="text-white/35 text-xs">₸/м²</span></div>
-                      </div>
-
-                      {quantity > 0 ? (
-                        <div className="flex items-center" style={{ border:"1px solid rgba(255,122,0,0.28)", borderRadius:"8px", overflow:"hidden" }}>
-                          <button onClick={() => decreaseCartQuantity(product.id)} aria-label={`Уменьшить ${product.name}`} className="w-10 h-10 flex items-center justify-center text-white" style={{ background:"#202020" }}>
-                            <Minus size={16}/>
-                          </button>
-                          <div className="w-11 h-10 flex items-center justify-center df font-black text-black text-lg" style={{ background:"#FF7A00" }}>{quantity}</div>
-                          <button onClick={() => addToCart(product)} aria-label={`Добавить ${product.name}`} className="w-10 h-10 flex items-center justify-center text-white" style={{ background:"#202020" }}>
-                            <Plus size={16}/>
-                          </button>
-                        </div>
-                      ) : (
-                        <button onClick={() => addToCart(product)}
-                          className="order-btn flex items-center justify-center gap-2 px-4 h-10 df font-bold text-xs tracking-widest uppercase text-black"
-                          style={{ background:"#FF7A00", borderRadius:"8px" }}>
-                          <Plus size={15}/> Добавить
-                        </button>
-                      )}
-                    </div>
+              <div className="p-4" style={{ background:"#181818", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
+                <div className="flex items-end justify-between gap-4">
+                  <div>
+                    <div className="text-white/36 text-xs uppercase tracking-widest mb-2">Выберите раздел</div>
+                    <p className="text-white/66 text-lg font-semibold leading-snug">
+                      Быстрый каталог для заказа через WhatsApp.
+                    </p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <div className="df font-black text-3xl leading-none" style={{ color:"#D8B06A" }}>{catalogCategories.length}</div>
+                    <div className="text-white/35 text-[11px]">разделов</div>
                   </div>
                 </div>
-
-                <button onClick={() => setSelectedProduct(product)}
-                  className="w-full py-3 df font-bold text-xs tracking-widest uppercase text-white/45"
-                  style={{ borderTop:"1px solid rgba(255,255,255,0.06)" }}>
-                  Подробнее
-                </button>
               </div>
-            );
-          })}
-        </div>
+            </div>
+
+            <div className="overflow-hidden" style={{ background:"#161616", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
+              {catalogCategories.map((category, index) => {
+                const count = allProducts.filter((product) => product.category === category.id).length;
+                return (
+                  <button key={category.id} onClick={() => {
+                    setMobileCatalogTab(category.id);
+                    setMobileCatalogScreen(category.id);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }} className="w-full text-left">
+                    <div className="flex items-center gap-3 p-3 min-h-[98px]" style={{ borderTop:index === 0 ? "none" : "1px solid rgba(255,255,255,0.07)" }}>
+                      <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden" style={{ background:"#222", borderRadius:"8px" }}>
+                        <img src={category.cover} alt={category.label}
+                          className={`w-full h-full ${category.id === "windows" || category.id === "corners" || category.id === "panels" || category.id === "paving" || category.id === "materials" ? "object-contain p-2" : "object-cover"}`}/>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <div className="text-white/30 text-[11px] mb-1">0{index + 1}</div>
+                            <h2 className="font-bold text-white text-base leading-tight">{category.label}</h2>
+                            <p className="text-white/38 text-xs leading-relaxed mt-1 line-clamp-2">{category.description}</p>
+                          </div>
+                          <span className="w-8 h-8 flex items-center justify-center text-black flex-shrink-0" style={{ background:"#D8B06A", borderRadius:"8px" }}>
+                            <ChevronRight size={17}/>
+                          </span>
+                        </div>
+                        <div className="mt-2 flex items-center gap-2">
+                          <span className="text-white/38 text-[11px]">{count} позиций</span>
+                          <span className="w-1 h-1 rounded-full" style={{ background:"rgba(255,255,255,0.22)" }}/>
+                          <span className="text-white/52 text-[11px] font-semibold">
+                            Открыть
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="sticky top-16 z-30 -mx-4 px-4 py-3 mb-4" style={{ background:"rgba(17,17,17,0.96)", backdropFilter:"blur(14px)", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
+              <button onClick={() => {
+                setMobileCatalogScreen(null);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }} className="h-11 px-3 flex items-center gap-2 text-white/72 font-semibold text-sm"
+                style={{ background:"#191919", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
+                <ArrowLeft size={17} style={{ color:"#D8B06A" }}/>
+                Разделы
+              </button>
+            </div>
+
+            <div className="mb-4 overflow-hidden" style={{ background:"#181818", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
+              <div className="relative h-44 bg-[#202020]">
+                <img src={activeMobileCategory.cover} alt={activeMobileCategory.label}
+                  className={`w-full h-full opacity-78 ${mobileCategoryId === "windows" || mobileCategoryId === "corners" || mobileCategoryId === "panels" || mobileCategoryId === "paving" || mobileCategoryId === "materials" ? "object-contain p-5" : "object-cover"}`}/>
+                <div className="absolute inset-0" style={{ background:"linear-gradient(to top,#181818 0%,rgba(24,24,24,0.28) 58%,rgba(24,24,24,0.08) 100%)" }}/>
+                <div className="absolute left-4 right-4 bottom-4">
+                  <div className="text-white/48 text-xs uppercase tracking-widest mb-2">Каталог</div>
+                  <h2 className="df font-black text-white text-4xl leading-none">{activeMobileCategory.label}</h2>
+                </div>
+              </div>
+              <div className="p-4 flex items-center justify-between gap-3">
+                <p className="text-white/46 text-sm leading-relaxed">{activeMobileCategory.description}</p>
+                <div className="text-right flex-shrink-0">
+                  <div className="df font-black text-2xl leading-none" style={{ color:"#D8B06A" }}>{mobileProducts.length}</div>
+                  <div className="text-white/35 text-[11px]">позиций</div>
+                </div>
+              </div>
+            </div>
+
+            {mobileCategoryId === "houses" ? (
+              <div className="flex flex-col gap-4">
+                {mobileProducts.map((product, index) => (
+                  <button key={product.id} onClick={() => setSelectedProduct(product)}
+                    className="w-full text-left overflow-hidden"
+                    style={{ background:"#161616", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
+                    <div className="relative aspect-[4/5] bg-[#202020] overflow-hidden">
+                      <img src={product.image} alt={product.name}
+                        className={`w-full h-full ${product.category === "corners" || product.category === "panels" || product.category === "paving" || product.category === "materials" ? "object-contain p-2" : "object-cover"}`}/>
+                      <div className="absolute inset-0" style={{ background:"linear-gradient(to top,rgba(0,0,0,0.62),rgba(0,0,0,0.06) 52%,transparent)" }}/>
+                      <div className="absolute left-4 right-4 bottom-4 flex items-end justify-between gap-4">
+                        <div>
+                          <div className="text-white/58 text-xs uppercase tracking-widest mb-2">Наши работы</div>
+                          <h3 className="df font-black text-white text-3xl leading-none">Работа {String(index + 1).padStart(2, "0")}</h3>
+                        </div>
+                        <span className="w-10 h-10 flex items-center justify-center text-black" style={{ background:"#D8B06A", borderRadius:"8px" }}>
+                          <ChevronRight size={18}/>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-4 flex items-center justify-between gap-3">
+                      <p className="text-white/48 text-sm leading-relaxed">{product.description}</p>
+                      <span className="text-white/72 text-xs font-semibold flex-shrink-0">Смотреть</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : mobileCategoryId === "windows" || mobileCategoryId === "corners" ? (
+              <div className="grid grid-cols-2 gap-3">
+                {mobileProducts.map((product, index) => (
+                  <button key={product.id} onClick={() => setSelectedProduct(product)}
+                    className="w-full text-left overflow-hidden"
+                    style={{ background:"#181818", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
+                    <div className="aspect-square p-3 flex items-center justify-center" style={{ background:"#202020" }}>
+                      <img src={product.image} alt={product.name} className="max-w-full max-h-full object-contain"/>
+                    </div>
+                    <div className="p-3">
+                      <div className="text-white/34 text-[11px] mb-1">Вариант {String(index + 1).padStart(2, "0")}</div>
+                      <h3 className="font-bold text-white text-sm leading-tight min-h-[34px]">{product.name}</h3>
+                      <div className="mt-3 h-10 flex items-center justify-center gap-1.5 font-semibold text-xs text-black"
+                        style={{ background:"#D8B06A", borderRadius:"8px" }}>
+                        Смотреть <ChevronRight size={14}/>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {mobileProducts.map(product => {
+                const quantity = getCartQuantity(product.id);
+                return (
+                  <div key={product.id} className={`${addedProductId === product.id ? "just-added" : ""}`} style={{ background:"#181818", border:`1px solid ${quantity > 0 ? "rgba(216,176,106,0.45)" : "rgba(255,255,255,0.08)"}`, borderRadius:"8px", overflow:"hidden" }}>
+                    <button onClick={() => setSelectedProduct(product)} className="relative w-full aspect-square overflow-hidden bg-[#1A1A1A] block">
+                      <img src={product.image} alt={product.name}
+                        className={`w-full h-full ${product.category === "corners" ? "object-contain p-2" : "object-cover"}`}/>
+                      <div className="absolute left-2 bottom-2">
+                        <div className="inline-flex px-2 py-1 font-semibold text-[10px] text-black" style={{ background:product.tagBg, borderRadius:"6px" }}>
+                          {product.tag}
+                        </div>
+                      </div>
+                      {quantity > 0 && (
+                        <div className="cart-badge absolute top-2 right-2 flex items-center gap-1 px-2 py-1 df font-bold text-xs text-black" style={{ background:"#D8B06A", borderRadius:"6px" }}>
+                          <ShoppingCart size={11}/> {quantity}
+                        </div>
+                      )}
+                    </button>
+
+                    <div className="p-3">
+                      <button onClick={() => setSelectedProduct(product)} className="text-left block w-full">
+                        <h3 className="font-bold text-white text-sm leading-tight min-h-[36px]">{product.name}</h3>
+                        <p className="text-white/38 text-xs mt-1 line-clamp-2 min-h-[32px]">{product.description}</p>
+                      </button>
+
+                      <div className="mt-3">
+                        <div className="text-white/30 text-[11px]">{product.unit ? "цена от" : "стоимость"}</div>
+                        <div className="df font-black text-[1.65rem] leading-none" style={{ color:"#D8B06A" }}>
+                          {product.price} {product.unit && <span className="text-white/42 text-xs">{product.unit}</span>}
+                        </div>
+                      </div>
+
+                      <div className="mt-3 flex flex-col gap-2">
+                        <button onClick={() => setSelectedProduct(product)}
+                          className="h-10 w-full flex items-center justify-center gap-1.5 font-semibold text-xs text-white/62"
+                          style={{ background:"#202020", border:"1px solid rgba(255,255,255,0.07)", borderRadius:"8px" }}>
+                          Подробнее <ChevronRight size={14}/>
+                        </button>
+
+                        {quantity > 0 ? (
+                          <div className="h-11 flex items-center" style={{ border:"1px solid rgba(216,176,106,0.35)", borderRadius:"8px", overflow:"hidden" }}>
+                            <button onClick={() => decreaseCartQuantity(product.id)} aria-label={`Уменьшить ${product.name}`} className="w-11 h-11 flex items-center justify-center text-white" style={{ background:"#202020" }}>
+                              <Minus size={17}/>
+                            </button>
+                            <div className="flex-1 h-11 flex items-center justify-center df font-black text-black text-lg" style={{ background:"#D8B06A" }}>{quantity}</div>
+                            <button onClick={() => addToCart(product)} aria-label={`Добавить ${product.name}`} className="w-11 h-11 flex items-center justify-center text-white" style={{ background:"#202020" }}>
+                              <Plus size={17}/>
+                            </button>
+                          </div>
+                        ) : (
+                          <button onClick={() => addToCart(product)}
+                            className="order-btn h-11 w-full flex items-center justify-center gap-2 font-bold text-xs text-black"
+                            style={{ background:"#D8B06A", borderRadius:"8px" }}>
+                            <Plus size={16}/> Добавить
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            )}
+          </>
+        )}
       </section>
 
       {/* ══════════════════════════ HERO ══════════════════════════ */}
@@ -551,7 +1308,7 @@ export default function App() {
       </div>
 
       {/* ══════════════════════════ CATALOG ══════════════════════════ */}
-      <section id="catalog" className="py-20 md:py-32 px-5 sm:px-8 max-w-7xl mx-auto">
+      <section id="catalog" className="hidden sm:block py-20 md:py-32 px-5 sm:px-8 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <div className="flex items-center gap-3 mb-4">
@@ -613,22 +1370,32 @@ export default function App() {
                   Подробнее <ChevronRight size={13}/>
                 </button>
                 <div className="pt-4" style={{ borderTop:"1px solid rgba(255,255,255,0.06)" }}>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-white/32 text-xs">от</span>
-                    <span className="df font-black text-2xl" style={{ color:"#FF7A00" }}>{p.price}</span>
-                    <span className="text-white/32 text-xs">₸/м²</span>
-                  </div>
-                  <button onClick={() => addToCart(p)}
-                    className={`order-btn mt-4 w-full flex items-center justify-center gap-2.5 df font-bold text-sm tracking-widest uppercase px-5 py-3.5 text-black ${addedProductId === p.id ? "order-pop" : ""}`}
-                    style={{ background: addedProductId === p.id ? "#fff" : "#FF7A00" }}>
-                    {addedProductId === p.id ? <Check size={17}/> : <ShoppingCart size={17}/>}
-                    {addedProductId === p.id
-                      ? "Добавлено"
-                      : getCartQuantity(p.id)
-                        ? `Добавить еще (${getCartQuantity(p.id)})`
-                        : "Заказать"}
-                    <ChevronRight size={15}/>
-                  </button>
+                  {p.price ? (
+                    <>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-white/32 text-xs">от</span>
+                        <span className="df font-black text-2xl" style={{ color:"#FF7A00" }}>{p.price}</span>
+                        {p.unit && <span className="text-white/32 text-xs">{p.unit}</span>}
+                      </div>
+                      <button onClick={() => addToCart(p)}
+                        className={`order-btn mt-4 w-full flex items-center justify-center gap-2.5 df font-bold text-sm tracking-widest uppercase px-5 py-3.5 text-black ${addedProductId === p.id ? "order-pop" : ""}`}
+                        style={{ background: addedProductId === p.id ? "#fff" : "#FF7A00" }}>
+                        {addedProductId === p.id ? <Check size={17}/> : <ShoppingCart size={17}/>}
+                        {addedProductId === p.id
+                          ? "Добавлено"
+                          : getCartQuantity(p.id)
+                            ? `Добавить еще (${getCartQuantity(p.id)})`
+                            : "Заказать"}
+                        <ChevronRight size={15}/>
+                      </button>
+                    </>
+                  ) : (
+                    <button onClick={() => setSelectedProduct(p)}
+                      className="order-btn w-full flex items-center justify-center gap-2.5 df font-bold text-sm tracking-widest uppercase px-5 py-3.5 text-black"
+                      style={{ background:"#FF7A00" }}>
+                      Смотреть <ChevronRight size={15}/>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -676,7 +1443,7 @@ export default function App() {
                 <div key={item.id} className="flex items-center justify-between gap-4 py-3" style={{ borderTop:"1px solid rgba(255,255,255,0.06)" }}>
                   <div>
                     <div className="text-white text-sm font-semibold">{item.name}</div>
-                    <div className="text-white/35 text-xs">Количество: {item.quantity} · от {item.price} ₸/м²</div>
+                    <div className="text-white/35 text-xs">Количество: {item.quantity} · от {item.price} {item.unit}</div>
                   </div>
                   <button onClick={() => removeFromCart(item.id)} aria-label={`Удалить ${item.name}`} className="w-9 h-9 flex items-center justify-center text-white/35 transition-colors"
                     onMouseOver={e=>(e.currentTarget.style.color="#FF7A00")}
@@ -919,27 +1686,113 @@ export default function App() {
         borderTop:"1px solid rgba(255,255,255,0.08)",
         boxShadow:"0 -12px 30px rgba(0,0,0,0.35)",
       }}>
-        <div className="flex items-center gap-3">
-          <div className="min-w-0 flex-1 flex items-center gap-3">
-            <div className="w-11 h-11 flex items-center justify-center flex-shrink-0" style={{ background:"rgba(255,122,0,0.12)", border:"1px solid rgba(255,122,0,0.28)", color:"#FF7A00" }}>
+        <div className="flex items-center gap-2 p-2" style={{ background:"#141414", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
+          <button onClick={() => setMobileCartOpen(true)} className="min-w-0 flex-1 flex items-center gap-3 pl-1 text-left">
+            <div className="relative w-11 h-11 flex items-center justify-center flex-shrink-0" style={{ background:"rgba(255,122,0,0.12)", border:"1px solid rgba(255,122,0,0.28)", color:"#FF7A00", borderRadius:"8px" }}>
               <ShoppingCart size={18}/>
+              {cartTotalQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 flex items-center justify-center df font-black text-[10px] text-black" style={{ background:"#FF7A00", borderRadius:"999px" }}>
+                  {cartTotalQuantity}
+                </span>
+              )}
             </div>
             <div className="min-w-0">
-              <div className="df font-black text-white text-lg tracking-wide leading-none">
-                {cartTotalQuantity > 0 ? `В ЗАКАЗЕ: ${cartTotalQuantity}` : "БЫСТРЫЙ ЗАКАЗ"}
+              <div className="df font-black text-white text-base tracking-wide leading-none">
+                {cartTotalQuantity > 0 ? "ЗАКАЗ ГОТОВ" : "КОРЗИНА ПУСТА"}
               </div>
               <div className="text-white/35 text-xs truncate">
-                {cartTotalQuantity > 0 ? "Отправить выбранные товары" : "Написать в WhatsApp"}
+                {cartTotalQuantity > 0 ? "Нажмите, чтобы увидеть товары" : "Добавьте товар из каталога"}
               </div>
             </div>
-          </div>
-          <a href={whatsappHref} className="flex items-center justify-center gap-2 text-white font-bold px-5 py-3.5 df tracking-widest text-sm"
-            style={{ background:"#25D366", minWidth:"132px" }}>
-            <MessageCircle size={17}/>
-            {cartTotalQuantity > 0 ? "ОТПРАВИТЬ" : "НАПИСАТЬ"}
-          </a>
+          </button>
+          <button onClick={() => setMobileCartOpen(true)} className="h-12 flex items-center justify-center gap-2 text-black font-bold px-4 df tracking-widest text-xs"
+            style={{ background:"#D8B06A", minWidth:"118px", borderRadius:"8px" }}>
+            <ShoppingCart size={16}/>
+            {cartTotalQuantity > 0 ? "СМОТРЕТЬ" : "ЗАКАЗ"}
+          </button>
         </div>
       </div>
+
+      {mobileCartOpen && (
+        <div className="fixed inset-0 z-[75] sm:hidden flex items-end" style={{ background:"rgba(0,0,0,0.66)", backdropFilter:"blur(8px)" }}
+          onClick={() => setMobileCartOpen(false)}>
+          <div className="w-full max-h-[86svh] overflow-y-auto" style={{ background:"#111", borderTop:"1px solid rgba(255,255,255,0.1)", borderRadius:"8px 8px 0 0" }}
+            onClick={e => e.stopPropagation()}>
+            <div className="sticky top-0 z-10 px-4 pt-4 pb-3" style={{ background:"rgba(17,17,17,0.96)", borderBottom:"1px solid rgba(255,255,255,0.08)", backdropFilter:"blur(12px)" }}>
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-white/35 text-xs uppercase tracking-widest mb-1">Корзина</div>
+                  <h3 className="df font-black text-white text-3xl leading-none">Ваш заказ</h3>
+                </div>
+                <button onClick={() => setMobileCartOpen(false)} aria-label="Закрыть корзину"
+                  className="w-10 h-10 flex items-center justify-center text-white/70"
+                  style={{ background:"#1C1C1C", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
+                  <X size={18}/>
+                </button>
+              </div>
+            </div>
+
+            <div className="p-4 pb-5">
+              {cart.length === 0 ? (
+                <div className="py-10 text-center">
+                  <div className="w-14 h-14 mx-auto mb-4 flex items-center justify-center" style={{ background:"#1A1A1A", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px", color:"#D8B06A" }}>
+                    <ShoppingCart size={22}/>
+                  </div>
+                  <div className="text-white font-semibold">Корзина пока пустая</div>
+                  <p className="text-white/40 text-sm mt-2">Добавьте товары из каталога, и они появятся здесь.</p>
+                </div>
+              ) : (
+                <>
+                  <div className="flex flex-col gap-3">
+                    {cart.map(item => (
+                      <div key={item.id} className="p-3" style={{ background:"#181818", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px" }}>
+                        <div className="flex gap-3">
+                          <div className="w-16 h-16 flex-shrink-0 flex items-center justify-center overflow-hidden" style={{ background:"#222", borderRadius:"8px" }}>
+                            <img src={item.image} alt={item.name} className="w-full h-full object-contain p-1"/>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="min-w-0">
+                                <div className="text-white font-semibold text-sm leading-tight">{item.name}</div>
+                                <div className="text-white/38 text-xs mt-1">
+                                  {item.price ? `от ${item.price} ${item.unit}` : item.tag}
+                                </div>
+                              </div>
+                              <button onClick={() => removeFromCart(item.id)} aria-label={`Удалить ${item.name}`}
+                                className="w-9 h-9 flex items-center justify-center text-white/42 flex-shrink-0"
+                                style={{ background:"#202020", borderRadius:"8px" }}>
+                                <Trash2 size={15}/>
+                              </button>
+                            </div>
+
+                            <div className="mt-3 flex items-center justify-between gap-3">
+                              <div className="h-10 flex items-center" style={{ border:"1px solid rgba(216,176,106,0.35)", borderRadius:"8px", overflow:"hidden" }}>
+                                <button onClick={() => decreaseCartQuantity(item.id)} aria-label={`Уменьшить ${item.name}`} className="w-10 h-10 flex items-center justify-center text-white" style={{ background:"#202020" }}>
+                                  <Minus size={15}/>
+                                </button>
+                                <div className="w-11 h-10 flex items-center justify-center df font-black text-black text-lg" style={{ background:"#D8B06A" }}>{item.quantity}</div>
+                                <button onClick={() => addToCart(item)} aria-label={`Добавить ${item.name}`} className="w-10 h-10 flex items-center justify-center text-white" style={{ background:"#202020" }}>
+                                  <Plus size={15}/>
+                                </button>
+                              </div>
+                              <div className="text-white/35 text-xs">шт.</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <a href={whatsappHref} className="mt-4 h-13 w-full flex items-center justify-center gap-2 text-white font-bold df tracking-widest text-sm"
+                    style={{ background:"#25D366", borderRadius:"8px" }}>
+                    <MessageCircle size={17}/> Отправить в WhatsApp
+                  </a>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {selectedProduct && (
         <div className="modal-fade fixed inset-0 z-[80] flex items-center justify-center px-4 py-6" style={{ background:"rgba(0,0,0,0.78)", backdropFilter:"blur(12px)" }}
@@ -955,7 +1808,8 @@ export default function App() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2">
               <div className="relative min-h-[300px] lg:min-h-[520px] bg-[#1A1A1A] overflow-hidden">
-                <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full h-full object-cover"/>
+                <img src={selectedProduct.image} alt={selectedProduct.name}
+                  className={`w-full h-full ${selectedProduct.category === "windows" || selectedProduct.category === "corners" || selectedProduct.category === "panels" || selectedProduct.category === "paving" || selectedProduct.category === "materials" ? "object-contain p-6" : "object-cover"}`}/>
                 <div className="absolute inset-0" style={{ background:"linear-gradient(to top,rgba(0,0,0,0.5),transparent 55%)" }}/>
                 <div className="absolute left-5 bottom-5 px-3 py-1.5 df font-bold text-xs tracking-wide text-black" style={{ background:selectedProduct.tagBg }}>
                   {selectedProduct.tag}
@@ -966,7 +1820,9 @@ export default function App() {
                 <div>
                   <div className="flex items-center gap-3 mb-4">
                     <div className="h-px w-8" style={{ background:"#FF7A00" }}/>
-                    <span className="df font-bold text-xs tracking-[0.28em] uppercase" style={{ color:"#FF7A00" }}>Подробнее о товаре</span>
+                    <span className="df font-bold text-xs tracking-[0.28em] uppercase" style={{ color:"#FF7A00" }}>
+                      {selectedProduct.category === "houses" ? "Наша работа" : selectedProduct.category === "windows" ? "Декоративный элемент" : selectedProduct.category === "corners" ? "Колона" : "Подробнее о товаре"}
+                    </span>
                   </div>
                   <h3 className="df font-black text-white leading-none mb-4" style={{ fontSize:"clamp(2.4rem,6vw,4.5rem)" }}>
                     {selectedProduct.name}
@@ -984,25 +1840,32 @@ export default function App() {
                     ))}
                   </div>
 
-                  <div className="flex items-baseline gap-2 mb-7">
-                    <span className="text-white/32 text-sm">Цена от</span>
-                    <span className="df font-black text-4xl" style={{ color:"#FF7A00" }}>{selectedProduct.price}</span>
-                    <span className="text-white/32 text-sm">₸/м²</span>
-                  </div>
+                  {selectedProduct.price && (
+                    <div className="flex items-baseline gap-2 mb-7">
+                      <span className="text-white/32 text-sm">Цена от</span>
+                      <span className="df font-black text-4xl" style={{ color:"#FF7A00" }}>{selectedProduct.price}</span>
+                      {selectedProduct.unit && <span className="text-white/32 text-sm">{selectedProduct.unit}</span>}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <button onClick={() => addToCart(selectedProduct)}
-                    className={`order-btn flex-1 flex items-center justify-center gap-2.5 df font-bold text-sm tracking-widest uppercase px-5 py-4 text-black ${addedProductId === selectedProduct.id ? "order-pop" : ""}`}
-                    style={{ background: addedProductId === selectedProduct.id ? "#fff" : "#FF7A00" }}>
-                    {addedProductId === selectedProduct.id ? <Check size={17}/> : <ShoppingCart size={17}/>}
-                    {addedProductId === selectedProduct.id ? "Добавлено" : "Добавить в заказ"}
-                  </button>
-                  <a href={whatsappHref} className="flex-1 flex items-center justify-center gap-2.5 df font-bold text-sm tracking-widest uppercase px-5 py-4 text-white transition-colors"
+                  {selectedProduct.price && selectedProduct.category !== "houses" && selectedProduct.category !== "windows" && (
+                    <button onClick={() => addToCart(selectedProduct)}
+                      className={`order-btn flex-1 flex items-center justify-center gap-2.5 df font-bold text-sm tracking-widest uppercase px-5 py-4 text-black ${addedProductId === selectedProduct.id ? "order-pop" : ""}`}
+                      style={{ background: addedProductId === selectedProduct.id ? "#fff" : "#FF7A00" }}>
+                      {addedProductId === selectedProduct.id ? <Check size={17}/> : <ShoppingCart size={17}/>}
+                      {addedProductId === selectedProduct.id ? "Добавлено" : "Добавить в заказ"}
+                    </button>
+                  )}
+                  <a href={selectedProduct.category === "houses" || selectedProduct.category === "windows" || selectedProduct.category === "corners"
+                      ? `${CONTACTS.whatsappBase}?text=${encodeURIComponent(`Здравствуйте! Я с сайта Louis Beton, хочу ${selectedProduct.category === "houses" ? "такой фасад" : selectedProduct.category === "windows" ? "такой декоративный элемент для окна" : "такую колону"}: ${selectedProduct.name}.`)}`
+                      : whatsappHref}
+                    className="flex-1 flex items-center justify-center gap-2.5 df font-bold text-sm tracking-widest uppercase px-5 py-4 text-white transition-colors"
                     style={{ background:"#25D366" }}
                     onMouseOver={e=>(e.currentTarget.style.background="#1fbd5a")}
                     onMouseOut={e=>(e.currentTarget.style.background="#25D366")}>
-                    <MessageCircle size={17}/> WhatsApp
+                    <MessageCircle size={17}/> {selectedProduct.category === "houses" ? "Хочу такой фасад" : selectedProduct.category === "windows" ? "Хочу такой элемент" : selectedProduct.category === "corners" ? "Хочу такую колону" : "WhatsApp"}
                   </a>
                 </div>
               </div>
